@@ -62,7 +62,7 @@ Giao diện UI: http://localhost:3000
 
 ## API Endpoint
 - **`POST /air_quality`**
-  - **Input JSON:**
+  - **Ouput JSON:**
     ```json
     {
     "detail": [
