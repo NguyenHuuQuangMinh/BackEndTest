@@ -1,0 +1,39 @@
+.card {
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 12px;
+    color: white;
+    width: 350px;
+    text-align: center;
+    margin: auto;
+    font-family: Arial, sans-serif;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+/* Màu sắc gradient đẹp hơn thay vì chỉ dùng một màu */
+.card[data-aqi="green"] { background: linear-gradient(135deg, #56ab2f, #a8e063); }
+.card[data-aqi="orange"] { background: linear-gradient(135deg, #FFB75E, #ED8F03); }
+.card[data-aqi="yellow"] { background: linear-gradient(135deg, #FDC830, #F37335); }
+.card[data-aqi="red"] { background: linear-gradient(135deg, #D31027, #EA384D); }
+.card[data-aqi="purple"] { background: linear-gradient(135deg, #654ea3, #eaafc8); }
+.card[data-aqi="maroon"] { background: linear-gradient(135deg, #3E5151, #DECBA4); }
+
+h2 {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+.emoji {
+    font-size: 30px;
+}
