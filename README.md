@@ -91,9 +91,9 @@ Giao diện UI: http://localhost:3000
 - **`POST /docs`**
 Sẽ xuất hiện giao diện
 ![Giao diện FASTAPI](./images/GiaoDienFasrAPI.png)
-Bước 1: click vào "try it out"
-Bước 2: Nhập vào city và country 
-Bước 3: Sẽ hiển thị ra thông tin cần truy suất
+-Bước 1: click vào "try it out"
+-Bước 2: Nhập vào city và country 
+-Bước 3: Sẽ hiển thị ra thông tin cần truy suất
 ![Giao diện FASTAPI](./images/FasrAPIResult.png)
 
 - **`POST /air_quality?city=Hanoi&country=VN`**
