@@ -136,11 +136,11 @@ npm install
 ```sh
 npm start
 ```
-Nó sẽ hiển thị ra màn hình chính 
+1. Nó sẽ hiển thị ra màn hình chính 
 ![Giao diện IU](./images/GiaoDien.png)
-=> Nếu như nhập sai dữ liệu 
+2. Nếu như nhập sai dữ liệu 
 ![Giao diện IU nhưng nhập dữ liệu sai](./images/GiaoDienKhongTimRa.png)
-=> Nếu như nhập đúng dữ liệu
+3. Nếu như nhập đúng dữ liệu
 sẽ có một số ví dụ như sau: 
 ![Giao diện IU khi nhập đúng với mức AQI = 150](./images/GiaoDienTimRa.png)
 
