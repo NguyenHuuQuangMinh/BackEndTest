@@ -1,68 +1,156 @@
-## Problem-solving challenge: Farmer
+# Air Quality API test
 
-<img src="./imgs/farmer_image.jpg"/>
+## Mục tiêu
+Mục tiêu của test này là xây dựng một API giúp người dùng kiểm tra chất lượng không khí bằng cách nhập vào tên thành phố và mã quốc gia. API sẽ gọi dữ liệu từ dịch vụ bên thứ ba 
+```sh
+https://api.openweathermap.org/
+```
+, phân tích mức độ ô nhiễm và cung cấp đánh giá cùng khuyến nghị phù hợp.
 
-Mục tiêu là đưa ra một giải pháp toàn diện cho phép nông dân dự đoán năng suất cây trồng và có được những hiểu biết có thể hành động được. Giải pháp này phải tiết kiệm chi phí hoặc miễn phí, cho phép dễ dàng dự đoán năng suất trong quá khứ hoặc tương lai.
-
-**End User** là nông dân.
+**End User**: Người dùng quan tâm đến chất lượng không khí.
 
 ## Hiểu đề + Hướng giải quyết
-- Dữ liệu thầy cung cấp bao gồm các independent features là nông dân và nhiệt độ, và dependent feature là năng suất cây trồng. Mỗi nông dân có hiệu suất lao động khác nhau, làm việc tại các vùng khác nhau, điều kiện thời tiết cũng khác nhau, dẫn đến ảnh hưởng năng suất cây trồng.
-
-- Dựa vào bộ dữ liệu trên, em sẽ xây dựng mô hình hồi quy regression, giúp dự đoán năng suất cây trồng trong tương lai cho mỗi người nông dân khác nhau và với nhiệt độ vùng khác nhau.
-
-- Với end-user là nông dân, em sẽ xây dựng một giao diện cơ bản, chỉ cần những người nông dân nhập input (thông tin farmer, các thông tin về temperature) là có thể dự đoán được năng suất cây trồng.
-
-## Điểm chưa hiểu trong đề (hạn chế cá nhân)
-- Ở mục Hint (Gợi ý), thầy có bảo những người nông dân có thể cung cấp vị trí (kinh độ và vĩ độ). Em chưa hiểu Hint này có tác động gì đến problem trên.
+- API nhận thông tin vị trí (tên thành phố, mã quốc gia) do người dùng nhập vào.
+- Gọi API bên thứ ba (IQAir hoặc OpenWeatherMap) để lấy dữ liệu chất lượng không khí, bao gồm AQI, PM2.5, PM10.
+- Phân loại mức độ ô nhiễm dựa trên chỉ số AQI.
+- Trả về đánh giá về mức độ ô nhiễm và đưa ra khuyến nghị phù hợp.
+- Đóng gói API vào Docker container để dễ dàng triển khai.
 
 ## Getting Started
 1. Clone repository.
-```
-git clone https://github.com/tvtp11052002/Farmer-Challenge.git
+```sh
+git clone https://github.com/NguyenHuuQuangMinh/BackEndTest
 ```
 2. Change Directory
+```sh
+cd BackEndTest
 ```
-cd Farmer-Challenge
-```  
-4. Run App (Use Tkinter Interface)
+3. Cài đặt các dependencies
+```sh
+pip install -r requirements.txt
 ```
-python main.py
+4. Chạy API
+```sh
+uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 
-## Data
+## Docker Setup
+1. Build Docker image
+```sh
+docker build -t air-quality-api .
+```
+2. Run container
+```sh
+docker run -p 8000:8000 air-quality-api
+```
+3. Xây dựng Docker Image cho Frontend
+```sh
+cd BackEndTest\air-quality-ui
+docker build -t air-quality-ui .
+```
+4. Chạy Frontend Container
+```sh
+docker run -p 3000:3000 air-quality-ui
+```
+5. Sau khi chạy xong, truy cập ứng dụng tại
+```sh
+API: http://localhost:8000
+```
+```sh
+Giao diện UI: http://localhost:3000
+```
 
-Em sử dụng thư viện ProfileReport để tạo 1 Report mô tả chi tiết về dữ liệu.
+## API Endpoint
+- **`POST /air_quality`**
+  - **Input JSON:**
+    ```json
+    {
+    "detail": [
+        {
+        "type": "missing",
+        "loc": [
+            "query",
+            "city"
+        ],
+        "msg": "Field required",
+        "input": null
+        },
+        {
+        "type": "missing",
+        "loc": [
+            "query",
+            "country"
+        ],
+        "msg": "Field required",
+        "input": null
+        }
+    ]
+    }
+    ```
+=> vì Dùng hàm get
+- **`POST /docs`**
+Sẽ xuất hiện giao diện
+![Giao diện FASTAPI](./images/GiaoDienFasrAPI.png)
+Bước 1: click vào "try it out"
+Bước 2: Nhập vào city và country 
+Bước 3: Sẽ hiển thị ra thông tin cần truy suất
+![Giao diện FASTAPI](./images/FasrAPIResult.png)
 
-Chi tiết tại file [farmer.html](https://github.com/tvtp11052002/Farmer-Challenge/blob/master/farmer.html) (download to view)
+- **`POST /air_quality?city=Hanoi&country=VN`**
+- **Output JSON:**
+    ```json
+    {
+      "city": "Hanoi",
+      "aqi": 85,
+      "pm2_5": 35.0,
+      "pm10": 50.0,
+      "pollution_level": "Moderate",
+      "recommendation": "Limit outdoor activities if you are sensitive to air pollution."
+    }
+    ```
+## Phân loại mức độ ô nhiễm
+- AQI từ 0-50: **Tốt** (Good)
+- AQI từ 51-100: **Trung bình** (Moderate)
+- AQI từ 101-150: **Không tốt cho nhóm nhạy cảm** (Unhealthy for Sensitive Groups)
+- AQI từ 151-200: **Không tốt** (Unhealthy)
+- AQI từ 201-300: **Rất không tốt** (Very Unhealthy)
+- AQI trên 300: **Nguy hiểm** (Hazardous)
 
-## Model
-Em sử dụng 2 model cho bài toán là Random Forest Regression & Gradient Boosting Regression. Thông số sử dụng để đánh giá mô hình là RMSE và R-Squared
-### Random Forest Regresion
->Root Mean Squared Error (RMSE): 5.5509500357953625
+## Test API
+Sử dụng `test_main.py` để kiểm thử API:
+```sh
+pytest test_main.py
+```
 
->R-squared (R2): 0.9855622830127228
+## UI - React Integration
+Để chạy giao diện hiển thị chất lượng không khí bằng React:
+1. Chuyển đến thư mục giao diện:
+```sh
+cd BackEndTest\air-quality-ui
+```
+2. Cài đặt dependencies:
+```sh
+npm install
+```
+3. Chạy ứng dụng:
+```sh
+npm start
+```
+Nó sẽ hiển thị ra màn hình chính 
+![Giao diện IU](./images/GiaoDien.png)
+=> Nếu như nhập sai dữ liệu 
+![Giao diện IU nhưng nhập dữ liệu sai](./images/GiaoDienKhongTimRa.png)
+=> Nếu như nhập đúng dữ liệu
+sẽ có một số ví dụ như sau: 
+![Giao diện IU khi nhập đúng với mức AQI = 150](./images/GiaoDienTimRa.png)
 
-Actual vs Predicted Crop Yield
+![Giao diện IU khi nhập đúng với mức AQI = 50](./images/GiaoDienTimRa1.png)
 
-<img src="./imgs/result_rf.png"/>
+Card giao diện sẽ thay đổi màu tuỳ theo 
+Truy cập giao diện tại:
+```
+http://localhost:3000
+```
 
-### Gradient Boosting Regresion
->Root Mean Squared Error (RMSE): 5.683464391306491
-
->R-squared (R2): 0.984864729938393
-
-Actual vs Predicted Crop Yield
-
-<img src="./imgs/result_gb.png"/>
-
-=> Kết quả 2 mô hình không quá chênh lệch. Các bước tiếp theo sẽ sử dụng Random Forest Model
-
-## Predicted Result
-Kiểm thử với thông số như ảnh
-
-<img src="./imgs/prediction_box.jpg"/> 
-
-Kết quả
-
-<img src="./imgs/predicted_yield.jpg"/>
+---
+Dự án này giúp người dùng dễ dàng kiểm tra chất lượng không khí, cung cấp đánh giá và khuyến nghị để bảo vệ sức khỏe.
