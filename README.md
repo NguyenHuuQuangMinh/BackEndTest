@@ -137,14 +137,14 @@ npm install
 npm start
 ```
 1. Nó sẽ hiển thị ra màn hình chính 
-![Giao diện IU](./images/GiaoDien.png)
+- ![Giao diện IU](./images/GiaoDien.png)
 2. Nếu như nhập sai dữ liệu 
-![Giao diện IU nhưng nhập dữ liệu sai](./images/GiaoDienKhongTimRa.png)
+- ![Giao diện IU nhưng nhập dữ liệu sai](./images/GiaoDienKhongTimRa.png)
 3. Nếu như nhập đúng dữ liệu
 sẽ có một số ví dụ như sau: 
-![Giao diện IU khi nhập đúng với mức AQI = 150](./images/GiaoDienTimRa.png)
+- ![Giao diện IU khi nhập đúng với mức AQI = 150](./images/GiaoDienTimRa.png)
 
-![Giao diện IU khi nhập đúng với mức AQI = 50](./images/GiaoDienTimRa1.png)
+- ![Giao diện IU khi nhập đúng với mức AQI = 50](./images/GiaoDienTimRa1.png)
 
 Card giao diện sẽ thay đổi màu tuỳ theo 
 Truy cập giao diện tại:
